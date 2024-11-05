@@ -3,10 +3,11 @@ import '../components/button.dart';
 import '../components/text_field.dart';
 
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+  RegisterPage({super.key, required this.onTap});
   final TextEditingController _emailControler = TextEditingController();
   final TextEditingController _pwControler = TextEditingController();
   final TextEditingController _cPwControler = TextEditingController();
+  final void Function()? onTap;
 //todo
   register() {}
   @override
@@ -76,11 +77,13 @@ class RegisterPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Already have an account?"),
-                TextButton(
-                  onPressed: () {},
-                  child: Text("Sign up"),
-                ),
+                const Text("Already have an account?"),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: onTap,
+                  child:  Text("Log-in",
+                    style: TextStyle(color: Theme.of(context).colorScheme.secondary),),
+                )
               ],
             ),
           ]),

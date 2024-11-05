@@ -1,0 +1,50 @@
+import 'package:chat_app/components/button.dart';
+import 'package:chat_app/components/text_field.dart';
+import 'package:flutter/material.dart';
+import '../auth/auth_service.dart';
+
+class LoginPage extends StatelessWidget {
+  final TextEditingController _emailControler = TextEditingController();
+  final TextEditingController _pwControler = TextEditingController();
+
+  final void Function()? onTap;
+  LoginPage({super.key, required this.onTap});
+
+  // Implement login
+  void login(BuildContext context) async {
+    if (_emailControler.text.isEmpty || _pwControler.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Error"),
+          content: const Text("Please fill in both email and password."),
+        ),
+      );
+      return;
+    }
+
+    final authService = AuthService();
+
+    // Try login
+    try {
+      await authService.signInWithEmailPassword(
+          _emailControler.text, _pwControler.text);
+    }
+    // Catch errors
+    catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Login Failed"),
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+        centerTitle: true,
+        background

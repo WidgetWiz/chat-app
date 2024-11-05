@@ -1,16 +1,37 @@
 import 'package:chat_app/components/button.dart';
 import 'package:chat_app/components/text_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../auth/auth_service.dart';
+import '../auth/log_reg.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _emailControler = TextEditingController();
   final TextEditingController _pwControler = TextEditingController();
 
-  LoginPage({super.key});
+  final void Function()? onTap;
+  LoginPage({super.key, required this.onTap});
   //todo implement login
-  login() {}
+  void login(BuildContext context) async {
+    final authService = AuthService();
 
+    //try login
+    try {
+      await authService.signInWithEmailPassword(
+          _emailControler.text, _pwControler.text);
+    }
+    //catch errors
+    catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(title: Text(e.toString())));
+    }
+  }
+
+  //go to register page
+  toRegister() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,20 +82,26 @@ class LoginPage extends StatelessWidget {
             MyButton(
               text: "Login",
               onPressed: () {
-                login;
+                login(context);
               },
             ),
+
             const SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Don't have an account?"),
-                TextButton(
-                  onPressed: () {},
-                  child: Text("Sign up"),
-                ),
+                const Text("Need an account?"),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: onTap,
+                  child: Text(
+                    "Register",
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                )
               ],
             ),
           ]),
