@@ -27,7 +27,7 @@ class MyTextField extends StatelessWidget {
           ],
         ),
         child: TextField(
-          controller: controler,
+          TextEditingController controller: controler,
           obscureText: obscureText,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(

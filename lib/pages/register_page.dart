@@ -1,16 +1,14 @@
-import 'package:chat_app/components/button.dart';
-import 'package:chat_app/components/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../components/button.dart';
+import '../components/text_field.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
+  RegisterPage({super.key});
   final TextEditingController _emailControler = TextEditingController();
   final TextEditingController _pwControler = TextEditingController();
-
-  LoginPage({super.key});
-  //todo implement login
-  login() {}
-
+  final TextEditingController _cPwControler = TextEditingController();
+//todo
+  register() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +29,7 @@ class LoginPage extends StatelessWidget {
             ),
             //welcome message
             Text(
-              "Welcome back",
+              "Let's create your account",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Lato',
@@ -56,24 +54,32 @@ class LoginPage extends StatelessWidget {
               controler: _pwControler,
             ),
             const SizedBox(
+              height: 10,
+            ),
+            MyTextField(
+              hintText: "Confirm Password",
+              obscureText: true,
+              controler: _cPwControler,
+            ),
+            const SizedBox(
               height: 25,
             ),
             MyButton(
-              text: "Login",
+              text: "Register",
               onPressed: () {
-                login;
+                register();
               },
             ),
             const SizedBox(
-              height: 10,
+              height: 25,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Don't have an account?"),
+                Text("Already have an account?"),
                 TextButton(
                   onPressed: () {},
-                  child: Text("Sign up"),
+                  child: Text("Log-in"),
                 ),
               ],
             ),
