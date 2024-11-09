@@ -30,7 +30,9 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.debug // Adjust for production as needed
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug // Replace with a release signing config if required
         }
     }
 }

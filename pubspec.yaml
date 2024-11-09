@@ -44,6 +44,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/512px-Cib_Logo.svg.png"  # Replace with the path to your icon image
+  adaptive_icon_background: "#ffffff"    # Optional for Android adaptive icon
+  adaptive_icon_foreground: "assets/icon/app_icon.png"  # Optional for Android adaptive icon foreground
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

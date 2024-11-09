@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../auth/auth_service.dart';
 import '../chat/chat_service.dart';
-import '../components/user_tile.dart';
 import 'chat_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,7 +12,6 @@ class HomePage extends StatelessWidget {
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
 
-  // Logging out the user
   void logout(BuildContext context) async {
     try {
       await _authService.signOut();
@@ -34,9 +32,12 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blueAccent, Colors.cyan],
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -59,7 +60,9 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(
+        currentUserEmail: _authService.getCurrentUser()?.email,
+      ),
       body: _buildUserList(),
     );
   }
@@ -76,19 +79,10 @@ class HomePage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          itemCount: snapshot.data!.length,
-          itemBuilder: (context, index) {
-            final userData = snapshot.data![index];
-            return _buildUserListItem(userData, context);
-          },
-          separatorBuilder: (context, index) => const Divider(
-            thickness: 1,
-            height: 1,
-            indent: 20,
-            endIndent: 20,
-          ),
+        return ListView(
+          children: snapshot.data!
+              .map<Widget>((userData) => _buildUserListItem(userData, context))
+              .toList(),
         );
       },
     );
@@ -96,6 +90,13 @@ class HomePage extends StatelessWidget {
 }
 
 Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
+  if (userData["id"] == null || userData["email"] == null) {
+    return const ListTile(
+      title: Text("Invalid user data"),
+      subtitle: Text("Missing required fields"),
+    );
+  }
+
   return ListTile(
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     tileColor: Colors.grey[100],
@@ -117,6 +118,7 @@ Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
         MaterialPageRoute(
           builder: (context) => ChatPage(
             reciverEmail: userData["email"],
+            reciverID: userData["id"],
           ),
         ),
       );

@@ -1,21 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthService {
-//instance of auth
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-//sign in
-  Future<UserCredential> signInWithEmailPassword(String email, password) async {
+  // Sign in
+  Future<UserCredential> signInWithEmailPassword(
+      String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      //save user info
+      // Save user info
       _firestore.collection('Users').doc(userCredential.user!.uid).set(
-        {'uid': userCredential.user!.uid, 'email': email},
+        {
+          'uid': userCredential.user!.uid,
+          'email': email,
+          'id': userCredential.user!.uid, // Ensure 'id' is included
+        },
       );
 
       return userCredential;
@@ -24,16 +27,21 @@ class AuthService {
     }
   }
 
-  //sign up
-  Future<UserCredential> signUpWithEmailPassword(String email, password) async {
+  // Sign up
+  Future<UserCredential> signUpWithEmailPassword(
+      String email, String password) async {
     try {
-      //create user
+      // Create user
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password);
 
-      //save user info
+      // Save user info
       _firestore.collection('Users').doc(userCredential.user!.uid).set(
-        {'uid': userCredential.user!.uid, 'email': email},
+        {
+          'uid': userCredential.user!.uid,
+          'email': email,
+          'id': userCredential.user!.uid, // Ensure 'id' is included
+        },
       );
       return userCredential;
     } on FirebaseAuthException catch (e) {
@@ -41,8 +49,13 @@ class AuthService {
     }
   }
 
-  //sign out
+  // Sign out
   Future<void> signOut() async {
     return await _auth.signOut();
+  }
+
+  // Get current user
+  User? getCurrentUser() {
+    return _auth.currentUser;
   }
 }

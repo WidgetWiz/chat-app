@@ -21,6 +21,15 @@ class MyDrawer extends StatelessWidget {
               child: Image.asset("assets/images/128px-Cib_Logo.svg.png"),
             ),
           ),
+
+          // Control spacing using Divider
+          const Divider(
+            thickness: 1, // Adjusts the thickness of the divider
+            color: Colors.grey, // Change the color as needed
+            indent: 20, // Adds spacing from the left
+            endIndent: 20, // Adds spacing from the right
+          ),
+
           // Current User Email
           Padding(
             padding: const EdgeInsets.only(left: 25.0),
